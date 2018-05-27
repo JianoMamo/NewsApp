@@ -7,8 +7,8 @@ import android.content.Loader;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -19,26 +19,26 @@ import java.util.List;
 
 public class NewsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<News>> {
 
-    /** URL for earthquake data from the Guardian dataset */
+    /**
+     * URL for earthquake data from the Guardian dataset
+     */
     private static final String GUARDIAN_REQUEST_URL =
             "https://content.guardianapis.com/search?q=debate%20AND%20immigration&tag=politics/politics&from-date=2014-01-01&api-key=test";
 
     /**
-     * Constant value for the earthquake loader ID. We can choose any integer.
+     * Constant value for the news loader ID. We can choose any integer.
      * This really only comes into play if you're using multiple loaders.
      */
     private static final int NEWS_LOADER_ID = 1;
 
     /**
-     * Constant value for the earthquake loader ID. We can choose any integer.
-     * This really only comes into play if you're using multiple loaders.
+     * Adapter for the list of earthquakes
      */
-    private static final int EARTHQUAKE_LOADER_ID = 1;
-
-    /** Adapter for the list of earthquakes */
     private NewsAdapter mAdapter;
 
-    /** TextView that is displayed when the list is empty */
+    /**
+     * TextView that is displayed when the list is empty
+     */
     private TextView mEmptyStateTextView;
 
     @Override
@@ -47,12 +47,12 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.news_activity);
 
         // Find a reference to the {@link ListView} in the layout
-        ListView earthquakeListView =  findViewById(R.id.listView);
+        ListView earthquakeListView = findViewById(R.id.listView);
 
         mEmptyStateTextView = findViewById(R.id.no_internet);
         earthquakeListView.setEmptyView(mEmptyStateTextView);
 
-        // Create a new adapter that takes an empty list of earthquakes as input
+        // Create a new adapter that takes an empty list of news as input
         mAdapter = new NewsAdapter(this, new ArrayList<News>());
 
         // Set the adapter on the {@link ListView}
@@ -60,7 +60,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         earthquakeListView.setAdapter(mAdapter);
 
         // Set an item click listener on the ListView, which sends an intent to a web browser
-        // to open a website with more information about the selected earthquake.
+        // to open a website with more information about the selected article.
         earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -70,7 +70,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
                 // Convert the String URL into a URI object (to pass into the Intent constructor)
                 Uri earthquakeUri = Uri.parse(currentEarthquake.getmUrl());
 
-                // Create a new intent to view the earthquake URI
+                // Create a new intent to view the news URI
                 Intent websiteIntent = new Intent(Intent.ACTION_VIEW, earthquakeUri);
 
                 // Send the intent to launch a new activity
@@ -107,12 +107,14 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public Loader<List<News>> onCreateLoader(int i, Bundle bundle) {
+
         // Create a new loader for the given URL
         return new NewsLoader(this, GUARDIAN_REQUEST_URL);
     }
 
     @Override
     public void onLoadFinished(Loader<List<News>> loader, List<News> earthquakes) {
+
         // Hide loading indicator because the data has been loaded
         View loadingIndicator = findViewById(R.id.progressBar);
         loadingIndicator.setVisibility(View.GONE);
@@ -130,7 +132,6 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
             mAdapter.addAll(earthquakes);
             //updateUi(earthquakes);
         }
-
     }
 
     @Override

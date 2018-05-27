@@ -15,12 +15,21 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
 
 public final class QueryUtils {
 
-    /** Tag for the log messages */
+    public static final String JSON_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    public static final String DATE_FORMAT = "MMM d, yyy";
+    /**
+     * Tag for the log messages
+     */
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
 
     /**
@@ -32,9 +41,10 @@ public final class QueryUtils {
     }
 
     /**
-     * Query the USGS dataset and return a list of {@link News} objects.
+     * Query the Guardian dataset and return a list of {@link News} objects.
      */
     public static List<News> fetchNewsData(String requestUrl) {
+
         // Create URL object
         URL url = createUrl(requestUrl);
 
@@ -46,10 +56,10 @@ public final class QueryUtils {
             Log.e(LOG_TAG, "Problem making the HTTP request.", e);
         }
 
-        // Extract relevant fields from the JSON response and create a list of {@link Earthquake}s
+        // Extract relevant fields from the JSON response and create a list of {@link News}
         List<News> news = extractFeatureFromJson(jsonResponse);
 
-        // Return the list of {@link Earthquake}s
+        // Return the list of {@link News}
         return news;
     }
 
@@ -107,7 +117,6 @@ public final class QueryUtils {
         return jsonResponse;
     }
 
-
     /**
      * Convert the {@link InputStream} into a String which contains the
      * whole JSON response from the server.
@@ -126,18 +135,18 @@ public final class QueryUtils {
         return output.toString();
     }
 
-
     /**
      * Return a list of {@link News} objects that has been built up from
      * parsing the given JSON response.
      */
     private static List<News> extractFeatureFromJson(String newsJSON) {
+
         // If the JSON string is empty or null, then return early.
         if (TextUtils.isEmpty(newsJSON)) {
             return null;
         }
 
-        // Create an empty ArrayList that we can start adding earthquakes to
+        // Create an empty ArrayList that we can start adding articles to
         List<News> news = new ArrayList<>();
 
         // Try to parse the JSON response string. If there's a problem with the way the JSON
@@ -149,34 +158,36 @@ public final class QueryUtils {
             JSONObject rootObject = new JSONObject(newsJSON);
 
             // Extract the JSONObject associated with the key called "response",
-            // which represents a list of features (or earthquakes).
+            // which represents a list of results.
             JSONObject newsObject = rootObject.getJSONObject("response");
 
             JSONArray newsArray = newsObject.getJSONArray("results");
 
-            // For each earthquake in the earthquakeArray, create an {@link Earthquake} object
+            // For each article in the newsArray, create an {@link News} object
             for (int i = 0; i < newsArray.length(); i++) {
 
                 // Get a single article at position i within the list of news
                 JSONObject currentNews = newsArray.getJSONObject(i);
 
-                // Extract the value for the key called "mag"
+                // Extract the value for the key called "sectionName"
                 String sectionName = currentNews.getString("sectionName");
 
-                // Extract the value for the key called "place"
+                // Extract the value for the key called "webTitle"
                 String webTitle = currentNews.getString("webTitle");
 
-                // Extract the value for the key called "time"
+                // Extract the value for the key called "webPublicationDate"
                 String time = currentNews.getString("webPublicationDate");
 
-                // Extract the value for the key called "url"
+                String dateNews = formatDate(time);
+
+                // Extract the value for the key called "webUrl"
                 String url = currentNews.getString("webUrl");
 
-                // Create a new {@link News} object with the magnitude, location, time,
-                // and url from the JSON response.
-                News newObject = new News(sectionName, webTitle, time, url);
+                // Create a new {@link News} object with the sectionName, webTitle, webPublicationDate,
+                // and webUrl from the JSON response.
+                News newObject = new News(sectionName, webTitle, dateNews, url);
 
-                // Add the new {@link Earthquake} to the list of news.
+                // Add the new {@link News} to the list of news.
                 news.add(newObject);
             }
 
@@ -187,8 +198,21 @@ public final class QueryUtils {
             Log.e("QueryUtils", "Problem parsing the news JSON results", e);
         }
 
-        // Return the list of earthquakes
+        // Return the list of news
         return news;
     }
 
+    // A private method which, it corresponds with webPublicationTime.
+    private static String formatDate(String rawDate) {
+
+        SimpleDateFormat jsonFormatter = new SimpleDateFormat(JSON_DATE_FORMAT, Locale.US);
+        try {
+            Date parsedJsonDate = jsonFormatter.parse(rawDate);
+            SimpleDateFormat finalDateFormatter = new SimpleDateFormat(DATE_FORMAT, Locale.US);
+            return finalDateFormatter.format(parsedJsonDate);
+        } catch (ParseException e) {
+            Log.e(LOG_TAG, "Error parsing JSON date: ", e);
+            return "";
+        }
+    }
 }
