@@ -27,6 +27,10 @@ public final class QueryUtils {
 
     public static final String JSON_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     public static final String DATE_FORMAT = "MMM d, yyy";
+    public static final int READ_TIME_OUT = 10000;
+    public static final int CONNECT_TIME_OUT = 15000;
+    private static final String RESPONSE = "response";
+    private static final String RESULTS= "results";
     /**
      * Tag for the log messages
      */
@@ -88,8 +92,8 @@ public final class QueryUtils {
         InputStream inputStream = null;
         try {
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setReadTimeout(10000 /* milliseconds */);
-            urlConnection.setConnectTimeout(15000 /* milliseconds */);
+            urlConnection.setReadTimeout(READ_TIME_OUT /* milliseconds */);
+            urlConnection.setConnectTimeout(CONNECT_TIME_OUT /* milliseconds */);
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
@@ -159,9 +163,9 @@ public final class QueryUtils {
 
             // Extract the JSONObject associated with the key called "response",
             // which represents a list of results.
-            JSONObject newsObject = rootObject.getJSONObject("response");
+            JSONObject newsObject = rootObject.getJSONObject(RESPONSE);
 
-            JSONArray newsArray = newsObject.getJSONArray("results");
+            JSONArray newsArray = newsObject.getJSONArray(RESULTS);
 
             // For each article in the newsArray, create an {@link News} object
             for (int i = 0; i < newsArray.length(); i++) {
@@ -186,7 +190,7 @@ public final class QueryUtils {
                 // Create a new {@link News} object with the sectionName, webTitle, webPublicationDate,
                 // and webUrl from the JSON response.
                 News newObject = new News(sectionName, webTitle, dateNews, url);
-
+                
                 // Add the new {@link News} to the list of news.
                 news.add(newObject);
             }
