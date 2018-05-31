@@ -190,7 +190,7 @@ public final class QueryUtils {
                 // Create a new {@link News} object with the sectionName, webTitle, webPublicationDate,
                 // and webUrl from the JSON response.
                 News newObject = new News(sectionName, webTitle, dateNews, url);
-                
+
                 // Add the new {@link News} to the list of news.
                 news.add(newObject);
             }
