@@ -78,19 +78,15 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
                 News currentNews = mAdapter.getItem(position);
 
                 // Convert the String URL into a URI object (to pass into the Intent constructor)
-                Uri earthquakeUri = null;
-                if (currentNews != null) {
-                    earthquakeUri = Uri.parse(currentNews.getmUrl());
-                }
+                Uri newsUri =  Uri.parse(currentNews.getmUrl());
 
                 // Create a new intent to view the news URI
-                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, earthquakeUri);
+                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, newsUri);
 
                 if (websiteIntent.resolveActivity(getPackageManager()) != null) {
 
                     // Send the intent to launch a new activity
                     startActivity(websiteIntent);
-
                 }
             }
         });
@@ -100,10 +96,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
                 getSystemService(Context.CONNECTIVITY_SERVICE);
 
         // Get details on the currently active default data network
-        NetworkInfo networkInfo = null;
-        if (connMgr != null) {
-            networkInfo = connMgr.getActiveNetworkInfo();
-        }
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
         // If there is a network connection, fetch data
         if (networkInfo != null && networkInfo.isConnected()) {
@@ -166,9 +159,9 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
         // Append query parameter and its value. For example, the `format=geojson`
-        uriBuilder.appendQueryParameter("limit", "0");
+        uriBuilder.appendQueryParameter("limit","10");
         uriBuilder.appendQueryParameter("from-date",startTime);
-        uriBuilder.appendQueryParameter("to-date",endTime );
+        uriBuilder.appendQueryParameter("to-date",endTime);
 
         return new NewsLoader(this, uriBuilder.toString());
     }
@@ -182,10 +175,6 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
         // Set empty state text to display "No articles found."
         mEmptyStateTextView.setText(R.string.no_articles);
-
-        // Clear the adapter of previous news data
-        //mAdapter.clear();
-
 
         // If there is a valid list of {@link News}, then add them to the adapter's
         // data set. This will trigger the ListView to update.
