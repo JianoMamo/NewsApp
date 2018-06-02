@@ -10,7 +10,6 @@
         android:title="@string/settings_start_date_label" />
 
     <ListPreference
-
         android:defaultValue="@string/settings_end_date_default"
         android:entries="@array/settings_date_labels"
         android:entryValues="@array/settings_date_values"

@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -78,6 +79,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
                 News currentNews = mAdapter.getItem(position);
 
                 // Convert the String URL into a URI object (to pass into the Intent constructor)
+                assert currentNews != null;
                 Uri newsUri =  Uri.parse(currentNews.getmUrl());
 
                 // Create a new intent to view the news URI
@@ -96,6 +98,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
                 getSystemService(Context.CONNECTIVITY_SERVICE);
 
         // Get details on the currently active default data network
+        assert connMgr != null;
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
         // If there is a network connection, fetch data
@@ -158,10 +161,12 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         // buildUpon prepares the baseUri that we just parsed so we can add query parameters to it
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
-        // Append query parameter and its value. For example, the `format=geojson`
-        uriBuilder.appendQueryParameter("limit","10");
+        // Append query parameter and its value.
+       // uriBuilder.appendQueryParameter("limit","10");
         uriBuilder.appendQueryParameter("from-date",startTime);
         uriBuilder.appendQueryParameter("to-date",endTime);
+
+        Log.e("Malaka",uriBuilder.toString());
 
         return new NewsLoader(this, uriBuilder.toString());
     }

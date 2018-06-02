@@ -69,10 +69,9 @@ public final class QueryUtils {
         }
 
         // Extract relevant fields from the JSON response and create a list of {@link News}
-        List<News> news = extractResultsFromJson(jsonResponse);
 
         // Return the list of {@link News}
-        return news;
+        return extractResultsFromJson(jsonResponse);
     }
 
     /**
@@ -114,7 +113,7 @@ public final class QueryUtils {
                 Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem retrieving the earthquake JSON results.", e);
+            Log.e(LOG_TAG, "Problem retrieving the GUARDIAN JSON results.", e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
