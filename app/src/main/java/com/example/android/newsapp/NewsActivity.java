@@ -64,11 +64,13 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         // so the list can be populated in the user interface
         newsListView.setAdapter(mAdapter);
 
+
         // Obtain a reference to the SharedPreferences file for this app
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         // And register to be notified of preference changes
         // So we know when the user has adjusted the query settings
         prefs.registerOnSharedPreferenceChangeListener(this);
+        
 
         // Set an item click listener on the ListView, which sends an intent to a web browser
         // to open a website with more information about the selected article.
@@ -123,6 +125,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+
         if (key.equals(getString(R.string.settings_start_date_key)) ||
                 key.equals(getString(R.string.settings_end_date_key))){
             // Clear the ListView as a new query will be kicked off
@@ -138,7 +141,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
             // Restart the loader to requery the GUARDIAN as the query settings have been updated
             getLoaderManager().restartLoader(NEWS_LOADER_ID, null, this);
         }
-    }
+   }
 
     @Override
     public Loader<List<News>> onCreateLoader(int i, Bundle bundle) {

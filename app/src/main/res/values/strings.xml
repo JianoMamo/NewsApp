@@ -12,12 +12,12 @@
     <!-- Strings For Start Date Preference -->
     <string name="settings_start_date_label">Start Date</string>
     <string name="settings_start_date_key" translatable="false">from_date</string>
-    <string name="settings_start_date_default" translatable="false">2010-01-01</string>
+    <string name="settings_start_date_default" translatable="false">2011-01-01</string>
 
     <!-- Strings For End Date Preference -->
     <string name="settings_end_date_label">End Date</string>
     <string name="settings_end_date_key" translatable="false">to_date</string>
-    <string name="settings_end_date_default" translatable="false">2018-12-12</string>
+    <string name="settings_end_date_default" translatable="false">2018-12-31</string>
 
     <string name="label_2011">2011</string>
     <string name="label_2012">2012</string>
@@ -29,14 +29,14 @@
     <string name="label_2018">2018</string>
 
 
-    <string name="value_2011">2011–01–01</string>
-    <string name="value_2012">2012–01–01</string>
-    <string name="value_2013">2013–01–01</string>
-    <string name="value_2014">2014–01–01</string>
-    <string name="value_2015">2015–01–01</string>
-    <string name="value_2016">2016–01–01</string>
-    <string name="value_2017">2017–01–01</string>
-    <string name="value_2018">2018–01–01</string>
+    <string name="value_2011">2011-01-31</string>
+    <string name="value_2012">2012-01-31</string>
+    <string name="value_2013">2013-01-31</string>
+    <string name="value_2014">2014-01-31</string>
+    <string name="value_2015">2015-01-31</string>
+    <string name="value_2016">2016-01-31</string>
+    <string name="value_2017">2017-01-31</string>
+    <string name="value_2018">2018-01-31</string>
 
 
     <string name="author">Author:</string>
