@@ -3,18 +3,18 @@
     android:title="@string/settings_title">
 
     <ListPreference
-        android:defaultValue="@string/settings_order_by_default"
-        android:entries="@array/settings_order_by_labels"
-        android:entryValues="@array/settings_order_by_values"
-        android:key="@string/settings_order_by_key"
-        android:title="@string/settings_order_by_label" />
+        android:defaultValue="@string/settings_start_date_default"
+        android:entries="@array/settings_date_labels"
+        android:entryValues="@array/settings_date_values"
+        android:key="@string/settings_start_date_key"
+        android:title="@string/settings_start_date_label" />
 
-    <EditTextPreference
-        android:defaultValue="@string/settings_section_name_default"
-        android:inputType="text"
-        android:key="@string/settings_section_name_key"
-        android:selectAllOnFocus="true"
-        android:title="@string/settings_section_name_label" />
+    <ListPreference
 
+        android:defaultValue="@string/settings_end_date_default"
+        android:entries="@array/settings_date_labels"
+        android:entryValues="@array/settings_date_values"
+        android:key="@string/settings_end_date_key"
+        android:title="@string/settings_end_date_label" />
 
 </PreferenceScreen>

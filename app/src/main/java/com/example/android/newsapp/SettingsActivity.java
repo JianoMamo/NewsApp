@@ -14,7 +14,6 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
-
     }
 
     public static class NewsPreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
@@ -24,17 +23,18 @@ public class SettingsActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.settings_main);
 
-            Preference sectionName = findPreference(getString(R.string.settings_section_name_key));
-            bindPreferenceSummaryToValue(sectionName);
+            Preference startDate = findPreference(getString(R.string.settings_start_date_key));
+            bindPreferenceSummaryToValue(startDate);
 
-            Preference orderBy = findPreference(getString(R.string.settings_order_by_key));
-            bindPreferenceSummaryToValue(orderBy);
+            Preference endDate = findPreference(getString(R.string.settings_end_date_key));
+            bindPreferenceSummaryToValue(endDate);
         }
 
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
-                // The code in this method takes care of updating the displayed preference summary after it has been changed
-                String stringValue = value.toString();
+
+            // The code in this method takes care of updating the displayed preference summary after it has been changed
+            String stringValue = value.toString();
             if (preference instanceof ListPreference) {
                 ListPreference listPreference = (ListPreference) preference;
                 int prefIndex = listPreference.findIndexOfValue(stringValue);

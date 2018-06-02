@@ -27,7 +27,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
      * URL for earthquake data from the Guardian dataset
      */
     private static final String GUARDIAN_REQUEST_URL =
-            "https://content.guardianapis.com/search?api-key=92fcebd0-5324-442e-a2fb-33bde327890f";
+            "https://content.guardianapis.com/search?show-tags=contributor&show-elements=image&q=technology&api-key=92fcebd0-5324-442e-a2fb-33bde327890f";
 
     /**
      * Constant value for the news loader ID. We can choose any integer.
@@ -78,7 +78,10 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
                 News currentNews = mAdapter.getItem(position);
 
                 // Convert the String URL into a URI object (to pass into the Intent constructor)
-                Uri earthquakeUri = Uri.parse(currentNews.getmUrl());
+                Uri earthquakeUri = null;
+                if (currentNews != null) {
+                    earthquakeUri = Uri.parse(currentNews.getmUrl());
+                }
 
                 // Create a new intent to view the news URI
                 Intent websiteIntent = new Intent(Intent.ACTION_VIEW, earthquakeUri);
@@ -97,7 +100,10 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
                 getSystemService(Context.CONNECTIVITY_SERVICE);
 
         // Get details on the currently active default data network
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        NetworkInfo networkInfo = null;
+        if (connMgr != null) {
+            networkInfo = connMgr.getActiveNetworkInfo();
+        }
 
         // If there is a network connection, fetch data
         if (networkInfo != null && networkInfo.isConnected()) {
@@ -121,8 +127,8 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-        if (key.equals(getString(R.string.settings_section_name_key)) ||
-                key.equals(getString(R.string.settings_order_by_key))){
+        if (key.equals(getString(R.string.settings_start_date_key)) ||
+                key.equals(getString(R.string.settings_end_date_key))){
             // Clear the ListView as a new query will be kicked off
             mAdapter.clear();
 
@@ -133,7 +139,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
             View loadingIndicator = findViewById(R.id.progressBar);
             loadingIndicator.setVisibility(View.VISIBLE);
 
-            // Restart the loader to requery the USGS as the query settings have been updated
+            // Restart the loader to requery the GUARDIAN as the query settings have been updated
             getLoaderManager().restartLoader(NEWS_LOADER_ID, null, this);
         }
     }
@@ -144,13 +150,13 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         // getString retrieves a String value from the preferences. The second parameter is the default value for this preference.
-        String sectionName = sharedPrefs.getString(
-                getString(R.string.settings_section_name_key),
-                getString(R.string.settings_section_name_default));
+        String startTime = sharedPrefs.getString(
+                getString(R.string.settings_start_date_key),
+                getString(R.string.settings_start_date_default));
 
-        String orderBy = sharedPrefs.getString(
-                getString(R.string.settings_order_by_key),
-                getString(R.string.settings_order_by_default)
+        String endTime = sharedPrefs.getString(
+                getString(R.string.settings_end_date_key),
+                getString(R.string.settings_end_date_default)
         );
 
         // parse breaks apart the URI string that's passed into its parameter
@@ -160,10 +166,10 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
         // Append query parameter and its value. For example, the `format=geojson`
-        uriBuilder.appendQueryParameter("section  Name", sectionName);
-        uriBuilder.appendQueryParameter("orderby", orderBy);
+        uriBuilder.appendQueryParameter("limit", "0");
+        uriBuilder.appendQueryParameter("from-date",startTime);
+        uriBuilder.appendQueryParameter("to-date",endTime );
 
-        // Return the completed uri `http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&limit=10&minmag=minMagnitude&orderby=time
         return new NewsLoader(this, uriBuilder.toString());
     }
 
@@ -184,6 +190,8 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         // If there is a valid list of {@link News}, then add them to the adapter's
         // data set. This will trigger the ListView to update.
         if (news != null && !news.isEmpty()) {
+            mAdapter.clear();
+            mAdapter.setNotifyOnChange(true);
             mAdapter.addAll(news);
         }
     }

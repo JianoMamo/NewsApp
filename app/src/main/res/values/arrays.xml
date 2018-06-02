@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <string-array name="settings_order_by_labels">
-        <item>@string/settings_order_by_section_name_label</item>
-        <item>@string/settings_order_by_most_recent_label</item>
+    <string-array name="settings_date_labels">
+        <item>@string/label_2011</item>
+        <item>@string/label_2012</item>
+        <item>@string/label_2013</item>
+        <item>@string/label_2014</item>
+        <item>@string/label_2015</item>
+        <item>@string/label_2016</item>
+        <item>@string/label_2017</item>
+        <item>@string/label_2018</item>
     </string-array>
 
-    <string-array name="settings_order_by_values">
-        <item>@string/settings_order_by_section_name_value</item>
-        <item>@string/settings_order_by_most_recent_value</item>
+    <string-array name="settings_date_values">
+    <item>@string/value_2011</item>
+    <item>@string/value_2012</item>
+    <item>@string/value_2013</item>
+    <item>@string/value_2014</item>
+    <item>@string/value_2015</item>
+    <item>@string/value_2016</item>
+    <item>@string/value_2017</item>
+    <item>@string/value_2018</item>
     </string-array>
 </resources>

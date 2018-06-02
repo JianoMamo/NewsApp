@@ -16,7 +16,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/dp16"
     android:baselineAligned="false"
     android:orientation="horizontal"
@@ -52,6 +52,25 @@
             android:textSize="@dimen/sp16"
             tools:text="@string/placeholderTitle" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/author"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/sp12"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/authorId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp16"
+            tools:text="@string/authorsName"/>
+
+
     </LinearLayout>
 
     <LinearLayout
@@ -68,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:textColor="#000"
-            android:textSize="@dimen/sp12"
+            android:textSize="@dimen/sp16"
             tools:text="@string/placeholderDate" />
 
     </LinearLayout>

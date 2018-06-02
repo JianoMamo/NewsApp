@@ -25,12 +25,20 @@ import java.util.Locale;
 
 public final class QueryUtils {
 
-    public static final String JSON_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-    public static final String DATE_FORMAT = "MMM d, yyy";
-    public static final int READ_TIME_OUT = 10000;
-    public static final int CONNECT_TIME_OUT = 15000;
+    private static final String JSON_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    private static final String DATE_FORMAT = "MMM d, yyy";
+    private static final int READ_TIME_OUT = 10000;
+    private static final int CONNECT_TIME_OUT = 15000;
     private static final String RESPONSE = "response";
-    private static final String RESULTS= "results";
+    private static final String RESULTS = "results";
+    private static final String SECTIONNAME = "sectionName";
+    private static final String WEBTITLE = "webTitle";
+    private static final String WEBPUBLICATIONDATE = "webPublicationDate";
+    private static final String WEBURL = "webUrl";
+    private static final String TAGS = "tags";
+    private static final String AUTHOR = "webTitle";
+
+
     /**
      * Tag for the log messages
      */
@@ -61,10 +69,9 @@ public final class QueryUtils {
         }
 
         // Extract relevant fields from the JSON response and create a list of {@link News}
-        List<News> news = extractFeatureFromJson(jsonResponse);
 
         // Return the list of {@link News}
-        return news;
+        return extractResultsFromJson(jsonResponse);
     }
 
     /**
@@ -143,7 +150,7 @@ public final class QueryUtils {
      * Return a list of {@link News} objects that has been built up from
      * parsing the given JSON response.
      */
-    private static List<News> extractFeatureFromJson(String newsJSON) {
+    private static List<News> extractResultsFromJson(String newsJSON) {
 
         // If the JSON string is empty or null, then return early.
         if (TextUtils.isEmpty(newsJSON)) {
@@ -174,22 +181,34 @@ public final class QueryUtils {
                 JSONObject currentNews = newsArray.getJSONObject(i);
 
                 // Extract the value for the key called "sectionName"
-                String sectionName = currentNews.getString("sectionName");
+                String sectionName = currentNews.getString(SECTIONNAME);
 
                 // Extract the value for the key called "webTitle"
-                String webTitle = currentNews.getString("webTitle");
+                String webTitle = currentNews.getString(WEBTITLE);
 
                 // Extract the value for the key called "webPublicationDate"
-                String time = currentNews.getString("webPublicationDate");
+                String time = currentNews.getString(WEBPUBLICATIONDATE);
 
                 String dateNews = formatDate(time);
 
                 // Extract the value for the key called "webUrl"
-                String url = currentNews.getString("webUrl");
+                String url = currentNews.getString(WEBURL);
+
+                // Extract the array for the key called "tags
+                JSONArray tagArray = currentNews.getJSONArray(TAGS);
+
+                String author = "";
+
+                if (tagArray.length() != 0) {
+                    for (int j = 0; j < tagArray.length(); j++) {
+                        JSONObject tagObject = tagArray.getJSONObject(j);
+                        author = tagObject.getString(AUTHOR);
+                    }
+                }
 
                 // Create a new {@link News} object with the sectionName, webTitle, webPublicationDate,
                 // and webUrl from the JSON response.
-                News newObject = new News(sectionName, webTitle, dateNews, url);
+                News newObject = new News(sectionName, webTitle, dateNews, url, author);
 
                 // Add the new {@link News} to the list of news.
                 news.add(newObject);
