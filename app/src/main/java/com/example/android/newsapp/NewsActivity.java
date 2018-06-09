@@ -70,7 +70,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         // And register to be notified of preference changes
         // So we know when the user has adjusted the query settings
         prefs.registerOnSharedPreferenceChangeListener(this);
-        
+
 
         // Set an item click listener on the ListView, which sends an intent to a web browser
         // to open a website with more information about the selected article.
@@ -168,9 +168,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
        // uriBuilder.appendQueryParameter("limit","10");
         uriBuilder.appendQueryParameter("from-date",startTime);
         uriBuilder.appendQueryParameter("to-date",endTime);
-
-        Log.e("Malaka",uriBuilder.toString());
-
+        
         return new NewsLoader(this, uriBuilder.toString());
     }
 
